@@ -3,7 +3,9 @@ import { getProducts, addToCart } from '../../api/products'
 import { getHistory } from '../../api/shopping-cart'
 import { withRouter } from 'react-router-dom'
 import messages from '../AutoDismissAlert/messages'
-
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import CardGroup from 'react-bootstrap/CardGroup'
 const ProductsPage = ({ user, msgAlert }) => {
   const [products, setProducts] = useState([])
 
@@ -37,19 +39,32 @@ const ProductsPage = ({ user, msgAlert }) => {
       .catch(console.error)
   }
 
+  const convertDollar = (num) => {
+    const total = num * 0.01
+    return total
+  }
+
   const productsMap = products.map(product => (
-    <li key={product._id}>
-      <h3>Name: {product.name}</h3>
-      <h5>Description: {product.description}</h5>
-      <h5>Category: {product.category}</h5>
-      <button onClick={() => onAddToCart(event, product)}>Add To Cart</button>
-    </li>
+    <div key={product._id}>
+      <Card style={{ width: '18rem' }} >
+        <Card.Img variant="top" src={product.imageURL} />
+        <Card.Body>
+          <Card.Title><h3>{product.name}</h3></Card.Title>
+          <h4> ${convertDollar(product.cost)} </h4>
+          <p>{product.description}</p>
+          <h6>Category: {product.category}</h6>
+          <Button onClick={() => onAddToCart(event, product)}>Add To Cart</Button>
+        </Card.Body>
+      </Card>
+    </div>
   ))
 
   return (
     <div>
       <h2>Available Products</h2>
-      {productsMap}
+      <CardGroup>
+        {productsMap}
+      </CardGroup>
     </div>
   )
 }
