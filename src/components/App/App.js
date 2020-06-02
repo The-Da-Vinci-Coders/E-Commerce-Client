@@ -7,8 +7,10 @@ import Header from '../Header/Header'
 import SignUp from '../SignUp/SignUp'
 import SignIn from '../SignIn/SignIn'
 import SignOut from '../SignOut/SignOut'
-import ProductsPage from '../Products/ProductsPage'
 import ChangePassword from '../ChangePassword/ChangePassword'
+import ProductsPage from '../Products/ProductsPage'
+import CurrentShoppingCart from '../ShoppingCart/CurrentShoppingCart'
+import Checkout from '../Checkout/Checkout'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -32,6 +34,10 @@ const App = () => {
         />
       ))}
       <main className="container">
+        <AuthenticatedRoute path='/checkout' user={user} component={Checkout}/>
+        <AuthenticatedRoute path='/shopping-cart' user={user} exact render={() => (
+          <CurrentShoppingCart msgAlert={msgAlert} user={user} />
+        )} />
         <Route path='/products' render={() => (
           <ProductsPage msgAlert={msgAlert} user={user} />
         )} />

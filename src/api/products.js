@@ -17,7 +17,9 @@ export const addToCart = (id, product, user) => {
   return axios({
     url: apiUrl + '/shopping-cart/' + id,
     method: 'PATCH',
-    data: product,
+    data: {
+      'product': product
+    },
     headers: {
       'Authorization': `Bearer ${user.token}`
     }

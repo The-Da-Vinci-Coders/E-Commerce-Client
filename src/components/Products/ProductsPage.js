@@ -1,41 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import { getProducts, addToCart } from '../../api/products'
-import { getHistory, createEmptyCart } from '../../api/shopping-cart'
+import { getHistory } from '../../api/shopping-cart'
 import { withRouter } from 'react-router-dom'
+import messages from '../AutoDismissAlert/messages'
 
-const ProductsPage = ({ user, setMsgAlerts }) => {
+const ProductsPage = ({ user, msgAlert }) => {
   const [products, setProducts] = useState([])
 
   useEffect(() => {
-    getProducts(user)
+    getProducts()
       .then(currProducts => {
         setProducts(currProducts.data.products)
       })
-      .catch(console.error)
+      .catch(() => {
+        msgAlert({
+          heading: 'Product Search Failed',
+          message: messages.getProductsFailure,
+          variant: 'danger'
+        })
+      })
   }, [])
 
   const onAddToCart = (event, product) => {
     // get all shopping carts belonging to current user
     getHistory(user)
-      // if this goes fine, take the carts and find the active cart
       .then(data => {
         const carts = data.data.shoppingCart
-        return carts
+        // find the current active cart
+        const activeCart = carts.find(cart => cart.active)
+        return activeCart
       })
       .then(activeCart => {
-        let newCart
-        // if there is no active cart
-        if (!activeCart) {
-          // make a new empty one
-          newCart = createEmptyCart(user)
-        // if there is, we just want to return it
-        } else {
-          newCart = activeCart
-        }
-        return newCart
+        console.log(product)
+        addToCart(activeCart._id, product, user)
       })
-      .then(newCart => addToCart(newCart._id, product, user))
-      .then(console.log)
       .catch(console.error)
   }
 
