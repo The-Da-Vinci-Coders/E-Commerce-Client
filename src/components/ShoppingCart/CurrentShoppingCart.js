@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { getHistory } from '../../api/shopping-cart'
-import { withRouter, Link, Route } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import messages from '../AutoDismissAlert/messages'
-import Checkout from '../Checkout/Checkout'
-
 const CurrentShoppingCart = ({ user, msgAlert, match }) => {
   const [shoppingCart, setShoppingCart] = useState({
     products: []
@@ -28,9 +26,7 @@ const CurrentShoppingCart = ({ user, msgAlert, match }) => {
 
   return (
     <div>
-      <Route path={match.url + '/checkout'} user={user} component={Checkout}/>
       <h2>Shopping Cart</h2>
-      {console.log(shoppingCart.products)}
       {shoppingCart.products.map(product => (
         <div key={product._id}>
           <h3>{product.name}</h3>
@@ -39,7 +35,7 @@ const CurrentShoppingCart = ({ user, msgAlert, match }) => {
         </div>
       ))}
       {shoppingCart.totalCost}
-      <Link to={match.url + '/checkout'}><button>Check Out</button></Link>
+      <Link to={'/checkout'}><button>Check Out</button></Link>
     </div>
 
   )

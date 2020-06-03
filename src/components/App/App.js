@@ -9,6 +9,7 @@ import SignIn from '../SignIn/SignIn'
 import SignOut from '../SignOut/SignOut'
 import ChangePassword from '../ChangePassword/ChangePassword'
 import ProductsPage from '../Products/ProductsPage'
+import Checkout from '../Checkout/Checkout'
 import CurrentShoppingCart from '../ShoppingCart/CurrentShoppingCart'
 // import Checkout from '../Checkout/Checkout'
 
@@ -37,6 +38,9 @@ const App = () => {
         <Switch>
           <AuthenticatedRoute exact path='/shopping-cart' user={user} render={() => (
             <CurrentShoppingCart msgAlert={msgAlert} user={user} />
+          )} />
+          <AuthenticatedRoute path='/checkout' user={user} render={() => (
+            <Checkout msgAlert={msgAlert} user={user} />
           )} />
           <Route path='/products' render={() => (
             <ProductsPage msgAlert={msgAlert} user={user} />

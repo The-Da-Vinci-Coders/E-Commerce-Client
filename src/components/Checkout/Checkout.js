@@ -1,21 +1,45 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Accordion from 'react-bootstrap/Accordion'
 import CheckoutForm from './CheckoutForm'
+import messages from '../AutoDismissAlert/messages'
+import { getHistory } from '../../api/shopping-cart'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 
-const Checkout = ({ user, msgAlert, shoppingCart }) => {
+const Checkout = ({ user, msgAlert }) => {
   const stripePromise = loadStripe('pk_test_UAYhjaj3nMDpJIFaSleA1hk100LECO92t8')
+  const [shoppingCart, setShoppingCart] = useState({
+    products: [],
+    totalCost: 0
+  })
 
   const onShipSubmit = event => {
     event.preventDefault()
   }
 
+  useEffect(() => {
+    getHistory(user)
+      .then(data => {
+        const carts = data.data.shoppingCart
+        const activeCart = carts.find(cart => cart.active)
+        return setShoppingCart(activeCart)
+      })
+      .catch(error => {
+        msgAlert({
+          heading: 'Shopping Cart Failed',
+          message: messages.getCartFailure,
+          variant: 'danger'
+        })
+        console.error(error)
+      })
+  }, [])
+
   return (
     <div>
+      {console.log(shoppingCart)}
       <Accordion defaultActiveKey="0">
         <Card>
           <Card.Header>
