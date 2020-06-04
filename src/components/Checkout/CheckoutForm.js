@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
+import { createCardToken, addCardToken, sendCharge } from '../../api/stripe'
 import { Redirect } from 'react-router-dom'
 import { getHistory, changeCartActive, createEmptyCart } from '../../api/shopping-cart'
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-// import { sendPayment } from '../../api/stripe'
-const stripePromise = require('stripe')('pk_test_51Gq3g3HMAAEaJ64PjSp9hCSzsviUDW0rAFxo4mxBVaNW3pcVGPd4cSqLDxdvMb732wtspXeFtlUuSWdfadfnWSQ1008BtvXx70')
+import Form from 'react-bootstrap/Form'
 
-const StipeCheckoutForm = ({ shoppingCart, user }) => {
-  const stripe = useStripe()
-  const elements = useElements()
+const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
   const [show, setShow] = useState(false)
+  const [number, setNumber] = useState('0000')
+  const [month, setMonth] = useState('0000')
+  const [year, setYear] = useState('0000')
+  const [cvc, setCvc] = useState('0000')
+  const [cardToken, setCardToken] = useState('')
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
@@ -21,49 +23,40 @@ const StipeCheckoutForm = ({ shoppingCart, user }) => {
       <Redirect to='/shopping-cart' />
     )
   }
+  const handleChangeNumber = event => {
+    setNumber(event.target.value)
+  }
+  const handleChangeMonth = event => {
+    setMonth(event.target.value)
+  }
+  const handleChangeYear = event => {
+    setYear(event.target.value)
+  }
+  const handleChangeCvc = event => {
+    setCvc(event.target.value)
+  }
 
   const handleSubmit = async (event) => {
-    // Block native form submission.
     event.preventDefault()
+    createCardToken(number, month, year, cvc)
+      .then(data => {
+        setCardToken(data.card.id)
+      })
+      .then(() => addCardToken(cardToken, customer))
+      .then(() => handleShow())
+      .catch(console.error)
+  }
 
-    if (!stripe || !elements) {
-      // Stripe.js has not loaded yet. Make sure to disable
-      // form submission until Stripe.js has loaded.
-      return
-    }
-
-    // Get a reference to a mounted CardElement. Elements knows how
-    // to find your CardElement because there can only ever be one of
-    // each type of element.
-    const cardElement = elements.getElement(CardElement)
-
-    // Use your card Element with other Stripe.js APIs
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement
-    })
-
-    if (error) {
-      console.log('[error]', error)
-    } else {
-      console.log('[PaymentMethod]', paymentMethod)
-      handleShow()
-    }
-    console.log(stripe)
-    stripePromise.charges.create(
-      {
-        amount: 2000,
-        currency: 'usd'
-      }
-    )
-      .then(
-        getHistory(user)
-          .then(data => {
-            const carts = data.data.shoppingCart
-            const activeCart = carts.find(cart => cart.active)
-            activeCart.active = false
-            return activeCart
-          }))
+  const handlePurchaseCompletion = () => {
+  // add purchase
+    sendCharge(shoppingCart.totalCost, customer)
+      .then(() => getHistory(user))
+      .then(data => {
+        const carts = data.data.shoppingCart
+        const activeCart = carts.find(cart => cart.active)
+        activeCart.active = false
+        return activeCart
+      })
       .then(activeCart => {
         const id = activeCart.id
         const boolean = activeCart.active
@@ -76,6 +69,7 @@ const StipeCheckoutForm = ({ shoppingCart, user }) => {
       .then(currUser => {
         createEmptyCart(currUser)
       })
+      .then(() => handleClose())
       .then(<Redirect to='/products' />)
       .catch(console.error)
   }
@@ -104,33 +98,57 @@ const StipeCheckoutForm = ({ shoppingCart, user }) => {
           <Button variant="secondary" onClick={onCancelPurchase}>
             Cancel Purchase
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handlePurchaseCompletion}>
             Complete Purchase
           </Button>
         </Modal.Footer>
       </Modal>
-      <form onSubmit={handleSubmit}>
-        <CardElement
-          stripe={stripePromise}
-          options={{
-            style: {
-              base: {
-                fontSize: '16px',
-                color: '#424770',
-                '::placeholder': {
-                  color: '#aab7c4'
-                }
-              },
-              invalid: {
-                color: '#9e2146'
-              }
-            }
-          }}
-        />
-        <button type="submit" disabled={!stripe}>
-          Pay
-        </button>
-      </form>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>Card Number</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            name="number"
+            value={number}
+            placeholder="0000-0000-0000-0000"
+            onChange={handleChangeNumber}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Expiration</Form.Label>
+          <Form.Label>Month</Form.Label>
+          <Form.Control
+            required
+            name="month"
+            value={month}
+            type="text"
+            placeholder="00"
+            onChange={handleChangeMonth}
+          />
+          <Form.Label>Year</Form.Label>
+          <Form.Control
+            required
+            name="year"
+            value={year}
+            type="text"
+            placeholder="0000"
+            onChange={handleChangeYear}
+          />
+          <Form.Label>Cvc Number</Form.Label>
+          <Form.Control
+            required
+            name="cvc"
+            value={cvc}
+            type="text"
+            placeholder="000"
+            onChange={handleChangeCvc}
+          />
+        </Form.Group>
+        <Button type="submit" variant="primary">
+          Submit
+        </Button>
+      </Form>
     </div>
   )
 }

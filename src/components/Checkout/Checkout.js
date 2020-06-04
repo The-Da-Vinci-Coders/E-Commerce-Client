@@ -7,7 +7,7 @@ import StipeCheckoutForm from './CheckoutForm'
 import messages from '../AutoDismissAlert/messages'
 import { getHistory } from '../../api/shopping-cart'
 
-const Checkout = ({ user, msgAlert }) => {
+const Checkout = ({ user, msgAlert, customer }) => {
   const [shoppingCart, setShoppingCart] = useState({
     products: [],
     totalCost: 0
@@ -138,6 +138,7 @@ const Checkout = ({ user, msgAlert }) => {
               <StipeCheckoutForm
                 shoppingCart={shoppingCart}
                 user={user}
+                customer={customer}
               /> </Card.Body>
           </Accordion.Collapse>
         </Card>
