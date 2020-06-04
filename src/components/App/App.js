@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 import AuthenticatedRoute from '../AuthenticatedRoute/AuthenticatedRoute'
 import AutoDismissAlert from '../AutoDismissAlert/AutoDismissAlert'
@@ -11,6 +11,7 @@ import ChangePassword from '../ChangePassword/ChangePassword'
 import ProductsPage from '../Products/ProductsPage'
 import Checkout from '../Checkout/Checkout'
 import CurrentShoppingCart from '../ShoppingCart/CurrentShoppingCart'
+import ShoppingHistory from '../ShoppingHistory/ShoppingHistory'
 // import Checkout from '../Checkout/Checkout'
 
 const App = () => {
@@ -36,29 +37,30 @@ const App = () => {
         />
       ))}
       <main className="container">
-        <Switch>
-          <AuthenticatedRoute exact path='/shopping-cart' user={user} render={() => (
-            <CurrentShoppingCart msgAlert={msgAlert} user={user} />
-          )} />
-          <AuthenticatedRoute path='/checkout' user={user} render={() => (
-            <Checkout msgAlert={msgAlert} user={user} customer={customer}/>
-          )} />
-          <Route path='/products' render={() => (
-            <ProductsPage msgAlert={msgAlert} user={user} />
-          )} />
-          <Route path='/sign-up' render={() => (
-            <SignUp msgAlert={msgAlert} setUser={setUser} setCustomer={setCustomer}/>
-          )} />
-          <Route path='/sign-in' render={() => (
-            <SignIn msgAlert={msgAlert} setUser={setUser} setCustomer={setCustomer}/>
-          )} />
-          <AuthenticatedRoute user={user} path='/sign-out' render={() => (
-            <SignOut msgAlert={msgAlert} clearUser={clearUser} user={user} customer={customer} setCustomer={setCustomer}/>
-          )} />
-          <AuthenticatedRoute user={user} path='/change-password' render={() => (
-            <ChangePassword msgAlert={msgAlert} user={user} />
-          )} />
-        </Switch>
+        <AuthenticatedRoute exact path='/shopping-cart' user={user} render={() => (
+          <CurrentShoppingCart msgAlert={msgAlert} user={user}/>
+        )} />
+        <AuthenticatedRoute path='/checkout' user={user} render={() => (
+          <Checkout msgAlert={msgAlert} user={user} customer={customer}/>
+        )} />
+        <Route path='/products' render={() => (
+          <ProductsPage msgAlert={msgAlert} user={user}/>
+        )} />
+        <Route path='/sign-up' render={() => (
+          <SignUp msgAlert={msgAlert} setUser={setUser} setCustomer={setCustomer}/>
+        )} />
+        <Route path='/sign-in' render={() => (
+          <SignIn msgAlert={msgAlert} setUser={setUser} setCustomer={setCustomer}/>
+        )} />
+        <AuthenticatedRoute user={user} path='/sign-out' render={() => (
+          <SignOut msgAlert={msgAlert} clearUser={clearUser} user={user} customer={customer} setCustomer={setCustomer}/>
+        )} />
+        <AuthenticatedRoute user={user} path='/change-password' render={() => (
+          <ChangePassword msgAlert={msgAlert} user={user}/>
+        )} />
+        <AuthenticatedRoute user={user} path='/get-history' render={() => (
+          <ShoppingHistory msgAlert={msgAlert} user={user} />
+        )} />
       </main>
     </Fragment>
   )

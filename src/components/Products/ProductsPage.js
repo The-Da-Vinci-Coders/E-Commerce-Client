@@ -30,9 +30,6 @@ const ProductsPage = ({ user, msgAlert }) => {
         const carts = data.data.shoppingCart
         // find the current active cart
         const activeCart = carts.find(cart => cart.active)
-        return activeCart
-      })
-      .then(activeCart => {
         console.log(product)
         addToCart(activeCart._id, product, user)
       })

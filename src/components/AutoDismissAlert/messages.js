@@ -8,5 +8,6 @@ export default {
   changePasswordFailure: 'Failed to change passwords. Check your old password and try again.',
   getProductsFailure: 'Could not get products, please try again later.',
   getCartFailure: 'Could not get cart, please try again later.',
-  removeCartFailure: 'Could not remove item from cart, please try again later.'
+  removeCartFailure: 'Could not remove item from cart, please try again later.',
+  getPurchaseHistory: 'Could not get purchase history at this time, please try agian later.'
 }
