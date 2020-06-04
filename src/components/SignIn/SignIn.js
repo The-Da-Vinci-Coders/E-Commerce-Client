@@ -28,6 +28,11 @@ class SignIn extends Component {
     signIn(this.state)
       .then(res => {
         setUser(res.data.user)
+        return res.data.user.stripeId
+      })
+      .then(stripeId => {
+        this.props.setCustomer(stripeId)
+        console.log(stripeId)
       })
       .then(() => msgAlert({
         heading: 'Sign In Success',

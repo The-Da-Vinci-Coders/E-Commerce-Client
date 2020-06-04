@@ -43,12 +43,13 @@ class SignUp extends Component {
         createEmptyCart(currUser)
       })
       .then(() => createCustomer(this.state.email))
-      .then(customer => {
-        updateCustomer(customer.id, userId, userToken)
-        console.log(customer)
-        return customer
+      .then(data => {
+        updateCustomer(data.data.customer.id, userId, userToken)
+        return data.data.customer.id
       })
-      .then(customer => this.props.setCustomer(customer.id))
+      .then(id => {
+        this.props.setCustomer(id)
+      })
       .then(() => msgAlert({
         heading: 'Sign Up Success',
         message: messages.signUpSuccess,
