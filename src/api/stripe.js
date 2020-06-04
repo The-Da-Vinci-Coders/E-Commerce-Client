@@ -40,16 +40,16 @@ export const addCardToken = (token, id) => {
   })
 }
 
-export const createCardToken = card => {
+export const createCardToken = (number, month, year, cvc) => {
   return axios({
     method: 'POST',
     url: apiUrl + '/stripe/card-token',
     data: {
       'card': {
-        'number': card.number,
-        'month': card.month,
-        'year': card.year,
-        'cvc': card.cvc
+        'number': number,
+        'month': month,
+        'year': year,
+        'cvc': cvc
       }
     }
   })

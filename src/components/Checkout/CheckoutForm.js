@@ -8,11 +8,12 @@ import Form from 'react-bootstrap/Form'
 
 const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
   const [show, setShow] = useState(false)
-  const [number, setNumber] = useState('0000')
-  const [month, setMonth] = useState('0000')
-  const [year, setYear] = useState('0000')
-  const [cvc, setCvc] = useState('0000')
-  const [cardToken, setCardToken] = useState('')
+  const [number, setNumber] = useState('')
+  const [month, setMonth] = useState('')
+  const [year, setYear] = useState('')
+  const [cvc, setCvc] = useState('')
+  const [redirect, setRedirect] = useState(false)
+  // const [cardToken, setCardToken] = useState('')
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
@@ -36,41 +37,38 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
     setCvc(event.target.value)
   }
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = event => {
     event.preventDefault()
     createCardToken(number, month, year, cvc)
       .then(data => {
-        setCardToken(data.card.id)
+        const token = data.data.card.id
+        // setCardToken(data.data.card.id)
+        // console.log(cardToken)
+        return token
       })
-      .then(() => addCardToken(cardToken, customer))
+      .then(token => {
+        addCardToken(token, customer)
+      })
       .then(() => handleShow())
       .catch(console.error)
   }
 
   const handlePurchaseCompletion = () => {
-  // add purchase
     sendCharge(shoppingCart.totalCost, customer)
       .then(() => getHistory(user))
       .then(data => {
         const carts = data.data.shoppingCart
         const activeCart = carts.find(cart => cart.active)
         activeCart.active = false
-        return activeCart
-      })
-      .then(activeCart => {
         const id = activeCart.id
         const boolean = activeCart.active
         changeCartActive(user, id, boolean)
       })
-      .then(res => {
-        const currUser = res.data.user
-        return currUser
-      })
-      .then(currUser => {
-        createEmptyCart(currUser)
+      .then(() => {
+        createEmptyCart(user)
       })
       .then(() => handleClose())
-      .then(<Redirect to='/products' />)
+      .then(() => setRedirect(true))
       .catch(console.error)
   }
 
@@ -79,78 +77,84 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
     return total.toFixed(2)
   }
 
-  return (
-    <div>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Review Your Purchase</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {shoppingCart.products.map(product => (
-            <div key={product._id}>
-              <h3>{product.name}</h3>
-              <h6>Price:${convertDollar(product.cost)} </h6>
-            </div>
-          ))}
-          <h4>Total:${convertDollar(shoppingCart.totalCost)} </h4>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={onCancelPurchase}>
-            Cancel Purchase
+  if (!redirect) {
+    return (
+      <div>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Review Your Purchase</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {shoppingCart.products.map(product => (
+              <div key={product._id}>
+                <h3>{product.name}</h3>
+                <h6>Price:${convertDollar(product.cost)} </h6>
+              </div>
+            ))}
+            <h4>Total:${convertDollar(shoppingCart.totalCost)} </h4>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={onCancelPurchase}>
+              Cancel Purchase
+            </Button>
+            <Button variant="primary" onClick={handlePurchaseCompletion}>
+              Complete Purchase
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group>
+            <Form.Label>Card Number</Form.Label>
+            <Form.Control
+              required
+              type="text"
+              name="number"
+              value={number}
+              placeholder="0000-0000-0000-0000"
+              onChange={handleChangeNumber}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Expiration</Form.Label>
+            <Form.Label>Month</Form.Label>
+            <Form.Control
+              required
+              name="month"
+              value={month}
+              type="text"
+              placeholder="00"
+              onChange={handleChangeMonth}
+            />
+            <Form.Label>Year</Form.Label>
+            <Form.Control
+              required
+              name="year"
+              value={year}
+              type="text"
+              placeholder="0000"
+              onChange={handleChangeYear}
+            />
+            <Form.Label>Cvc Number</Form.Label>
+            <Form.Control
+              required
+              name="cvc"
+              value={cvc}
+              type="text"
+              placeholder="000"
+              onChange={handleChangeCvc}
+            />
+          </Form.Group>
+          <Button type="submit" variant="primary">
+            Submit
           </Button>
-          <Button variant="primary" onClick={handlePurchaseCompletion}>
-            Complete Purchase
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group>
-          <Form.Label>Card Number</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            name="number"
-            value={number}
-            placeholder="0000-0000-0000-0000"
-            onChange={handleChangeNumber}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Expiration</Form.Label>
-          <Form.Label>Month</Form.Label>
-          <Form.Control
-            required
-            name="month"
-            value={month}
-            type="text"
-            placeholder="00"
-            onChange={handleChangeMonth}
-          />
-          <Form.Label>Year</Form.Label>
-          <Form.Control
-            required
-            name="year"
-            value={year}
-            type="text"
-            placeholder="0000"
-            onChange={handleChangeYear}
-          />
-          <Form.Label>Cvc Number</Form.Label>
-          <Form.Control
-            required
-            name="cvc"
-            value={cvc}
-            type="text"
-            placeholder="000"
-            onChange={handleChangeCvc}
-          />
-        </Form.Group>
-        <Button type="submit" variant="primary">
-          Submit
-        </Button>
-      </Form>
-    </div>
-  )
+        </Form>
+      </div>
+    )
+  } else {
+    return (
+      <Redirect to='/products' />
+    )
+  }
 }
 
 export default StipeCheckoutForm

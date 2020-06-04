@@ -29,6 +29,15 @@ export const getHistory = user => {
   })
 }
 
+export const getUpdatedCart = (user, id) => {
+  return axios({
+    url: apiUrl + '/shopping-cart/' + id,
+    headers: {
+      'Authorization': `Bearer ${user.token}`
+    }
+  })
+}
+
 export const changeCartActive = (user, id, boolean) => {
   return axios({
     url: apiUrl + `/shopping-cart/${id}/active`,

@@ -19,15 +19,14 @@ const CurrentShoppingCart = ({ user, msgAlert, match }) => {
         const activeCart = carts.find(cart => cart.active)
         setShoppingCart(activeCart)
       })
-      .catch(error => {
+      .catch(() => {
         msgAlert({
           heading: 'Shopping Cart Failed',
           message: messages.getCartFailure,
           variant: 'danger'
         })
-        console.error(error)
       })
-  }, [])
+  }, [shoppingCart])
 
   const onRemoveFromCart = (event, product) => {
   // get all shopping carts belonging to current user
@@ -39,11 +38,15 @@ const CurrentShoppingCart = ({ user, msgAlert, match }) => {
         return activeCart
       })
       .then(activeCart => {
-        console.log(product)
         removeFromCart(activeCart._id, product, user)
-        console.log(activeCart)
       })
-      .catch(console.error)
+      .catch(() => {
+        msgAlert({
+          heading: 'Shopping Cart Failed',
+          message: messages.removeCartFailure,
+          variant: 'danger'
+        })
+      })
   }
 
   const convertDollar = (num) => {

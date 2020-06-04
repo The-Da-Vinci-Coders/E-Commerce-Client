@@ -7,5 +7,6 @@ export default {
   changePasswordSuccess: 'Password changed successfully!',
   changePasswordFailure: 'Failed to change passwords. Check your old password and try again.',
   getProductsFailure: 'Could not get products, please try again later.',
-  getCartFailure: 'Could not get cart, please try again later.'
+  getCartFailure: 'Could not get cart, please try again later.',
+  removeCartFailure: 'Could not remove item from cart, please try again later.'
 }
