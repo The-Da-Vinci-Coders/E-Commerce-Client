@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
+import { getHistory, changeCartActive, createEmptyCart } from '../../api/shopping-cart'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+// import { sendPayment } from '../../api/stripe'
+const stripePromise = require('stripe')('pk_test_51Gq3g3HMAAEaJ64PjSp9hCSzsviUDW0rAFxo4mxBVaNW3pcVGPd4cSqLDxdvMb732wtspXeFtlUuSWdfadfnWSQ1008BtvXx70')
 
-const CheckoutForm = ({ shoppingCart }) => {
+const StipeCheckoutForm = ({ shoppingCart, user }) => {
   const stripe = useStripe()
   const elements = useElements()
   const [show, setShow] = useState(false)
@@ -46,6 +49,40 @@ const CheckoutForm = ({ shoppingCart }) => {
       console.log('[PaymentMethod]', paymentMethod)
       handleShow()
     }
+    console.log(stripe)
+    stripePromise.charges.create(
+      {
+        amount: 2000,
+        currency: 'usd'
+      }
+    )
+      .then(
+        getHistory(user)
+          .then(data => {
+            const carts = data.data.shoppingCart
+            const activeCart = carts.find(cart => cart.active)
+            activeCart.active = false
+            return activeCart
+          }))
+      .then(activeCart => {
+        const id = activeCart.id
+        const boolean = activeCart.active
+        changeCartActive(user, id, boolean)
+      })
+      .then(res => {
+        const currUser = res.data.user
+        return currUser
+      })
+      .then(currUser => {
+        createEmptyCart(currUser)
+      })
+      .then(<Redirect to='/products' />)
+      .catch(console.error)
+  }
+
+  const convertDollar = (num) => {
+    const total = num * 0.01
+    return total.toFixed(2)
   }
 
   return (
@@ -58,10 +95,10 @@ const CheckoutForm = ({ shoppingCart }) => {
           {shoppingCart.products.map(product => (
             <div key={product._id}>
               <h3>{product.name}</h3>
-              <h5>{product.description}</h5>
+              <h6>Price:${convertDollar(product.cost)} </h6>
             </div>
           ))}
-          <h4>Total: {shoppingCart.totalCost}</h4>
+          <h4>Total:${convertDollar(shoppingCart.totalCost)} </h4>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onCancelPurchase}>
@@ -74,6 +111,7 @@ const CheckoutForm = ({ shoppingCart }) => {
       </Modal>
       <form onSubmit={handleSubmit}>
         <CardElement
+          stripe={stripePromise}
           options={{
             style: {
               base: {
@@ -97,4 +135,4 @@ const CheckoutForm = ({ shoppingCart }) => {
   )
 }
 
-export default CheckoutForm
+export default StipeCheckoutForm

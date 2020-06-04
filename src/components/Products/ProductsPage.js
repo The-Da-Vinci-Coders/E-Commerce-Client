@@ -41,7 +41,7 @@ const ProductsPage = ({ user, msgAlert }) => {
 
   const convertDollar = (num) => {
     const total = num * 0.01
-    return total
+    return total.toFixed(2)
   }
 
   const productsMap = products.map(product => (

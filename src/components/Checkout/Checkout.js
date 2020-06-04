@@ -3,14 +3,11 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Accordion from 'react-bootstrap/Accordion'
-import CheckoutForm from './CheckoutForm'
+import StipeCheckoutForm from './CheckoutForm'
 import messages from '../AutoDismissAlert/messages'
 import { getHistory } from '../../api/shopping-cart'
-import { Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
 
 const Checkout = ({ user, msgAlert }) => {
-  const stripePromise = loadStripe('pk_test_UAYhjaj3nMDpJIFaSleA1hk100LECO92t8')
   const [shoppingCart, setShoppingCart] = useState({
     products: [],
     totalCost: 0
@@ -137,11 +134,11 @@ const Checkout = ({ user, msgAlert }) => {
               Payment Information
           </Card.Header>
           <Accordion.Collapse eventKey="1">
-            <Card.Body><Elements stripe={stripePromise}>
-              <CheckoutForm
+            <Card.Body>
+              <StipeCheckoutForm
                 shoppingCart={shoppingCart}
-              />
-            </Elements></Card.Body>
+                user={user}
+              /> </Card.Body>
           </Accordion.Collapse>
         </Card>
       </Accordion>

@@ -15,6 +15,7 @@ import CurrentShoppingCart from '../ShoppingCart/CurrentShoppingCart'
 
 const App = () => {
   const [user, setUser] = useState(null)
+  const [customer, setCustomer] = useState(null)
   const [msgAlerts, setMsgAlerts] = useState([])
 
   const clearUser = () => setUser(null)
@@ -40,19 +41,19 @@ const App = () => {
             <CurrentShoppingCart msgAlert={msgAlert} user={user} />
           )} />
           <AuthenticatedRoute path='/checkout' user={user} render={() => (
-            <Checkout msgAlert={msgAlert} user={user} />
+            <Checkout msgAlert={msgAlert} user={user} customer={customer}/>
           )} />
           <Route path='/products' render={() => (
             <ProductsPage msgAlert={msgAlert} user={user} />
           )} />
           <Route path='/sign-up' render={() => (
-            <SignUp msgAlert={msgAlert} setUser={setUser} />
+            <SignUp msgAlert={msgAlert} setUser={setUser} setCustomer={setCustomer}/>
           )} />
           <Route path='/sign-in' render={() => (
-            <SignIn msgAlert={msgAlert} setUser={setUser} />
+            <SignIn msgAlert={msgAlert} setUser={setUser} setCustomer={setCustomer}/>
           )} />
           <AuthenticatedRoute user={user} path='/sign-out' render={() => (
-            <SignOut msgAlert={msgAlert} clearUser={clearUser} user={user} />
+            <SignOut msgAlert={msgAlert} clearUser={clearUser} user={user} customer={customer} setCustomer={setCustomer}/>
           )} />
           <AuthenticatedRoute user={user} path='/change-password' render={() => (
             <ChangePassword msgAlert={msgAlert} user={user} />

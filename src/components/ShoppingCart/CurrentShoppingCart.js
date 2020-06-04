@@ -46,6 +46,11 @@ const CurrentShoppingCart = ({ user, msgAlert, match }) => {
       .catch(console.error)
   }
 
+  const convertDollar = (num) => {
+    const total = num * 0.01
+    return total.toFixed(2)
+  }
+
   return (
     <div>
       <h2>Shopping Cart</h2>
@@ -55,13 +60,15 @@ const CurrentShoppingCart = ({ user, msgAlert, match }) => {
             <Card.Body>
               <Card.Title><h3>{product.name}</h3></Card.Title>
               <Card.Text><h5>{product.description}</h5></Card.Text>
+              <Card.Text><h6>${convertDollar(product.cost)}</h6></Card.Text>
+              <Button variant="danger" onClick={() => onRemoveFromCart(event, product)}>Remove</Button>
             </Card.Body>
-            <Button variant="danger" onClick={() => onRemoveFromCart(event, product)}>Remove item from Cart</Button>
           </Card>
         </div>
       ))}
-      {shoppingCart.totalCost}
-      <Link to={'/checkout'}><button>Check Out</button></Link>
+
+      <h3>Total:${convertDollar(shoppingCart.totalCost)}  </h3>
+      <Link to={'/checkout'}><Button variant="success">Check Out</Button></Link>
     </div>
   )
 }
