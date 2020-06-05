@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 import { getHistory } from '../../api/shopping-cart'
 import messages from '../AutoDismissAlert/messages'
 import Card from 'react-bootstrap/Card'
+import { deepIndexOf } from '../../lib/deep-index-of'
 
 const ShoppingHistory = ({ user, setMsgAlert }) => {
   const [shoppingHistory, setShoppingHistory] = useState([])
@@ -12,9 +13,29 @@ const ShoppingHistory = ({ user, setMsgAlert }) => {
       .then(data => {
         const carts = data.data.shoppingCart
         const inactiveCarts = carts.filter(cart => !cart.active)
-        console.log(inactiveCarts)
-        setShoppingHistory(inactiveCarts)
-        console.log(shoppingHistory)
+        const inactiveWithQuantity = inactiveCarts.map(activeCart => {
+          const currCart = {
+            products: [],
+            quantities: [],
+            totalCost: 0,
+            _id: activeCart._id
+          }
+          currCart.totalCost = activeCart.totalCost
+          for (let i = 0; i < activeCart.products.length; i++) {
+            const currProduct = activeCart.products[i]
+            if (deepIndexOf(currCart.products, currProduct) === -1) {
+              currCart.products.push(currProduct)
+              const index = deepIndexOf(currCart.products, currProduct)
+              currCart.quantities[index] = 1
+            } else {
+              const index = deepIndexOf(currCart.products, currProduct)
+              currCart.quantities[index] += 1
+            }
+          }
+          return currCart
+        })
+        console.log(inactiveWithQuantity)
+        setShoppingHistory(inactiveWithQuantity)
       })
       .catch(() => {
         setMsgAlert({
@@ -36,13 +57,13 @@ const ShoppingHistory = ({ user, setMsgAlert }) => {
       {shoppingHistory && shoppingHistory.map(shoppingCart => (
         <div key={shoppingCart._id}>
           <h3>Purchase:</h3>
-          {shoppingCart.products.map(product => (
+          {shoppingCart.products.map((product, index) => (
             <div key={product._id}>
               <Card>
                 <Card.Body>
                   <Card.Title><h3>{product.name}</h3></Card.Title>
                   <Card.Text><h5>{product.description}</h5></Card.Text>
-                  <Card.Text><h6>${convertDollar(product.cost)}</h6></Card.Text>
+                  <Card.Text className="cartCost"> <p>{shoppingCart.quantities[index]} &emsp; for &emsp; ${convertDollar(product.cost * shoppingCart.quantities[index])}</p></Card.Text>
                 </Card.Body>
               </Card>
             </div>

@@ -5,7 +5,7 @@ import { withRouter, Link } from 'react-router-dom'
 import messages from '../AutoDismissAlert/messages'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
-import lodash from 'lodash'
+import { deepIndexOf } from '../../lib/deep-index-of'
 // import CardGroup from 'react-bootstrap/CardGroup'
 
 const CurrentShoppingCart = ({ user, setMsgAlert, match }) => {
@@ -16,14 +16,14 @@ const CurrentShoppingCart = ({ user, setMsgAlert, match }) => {
   })
   const [rerender, setRerender] = useState(false)
 
-  const deepIndexOf = (arr, val) => {
-    for (let i = 0; i < arr.length; i++) {
-      if (lodash.isEqual(arr[i], val)) {
-        return i
-      }
-    }
-    return -1
-  }
+  // const deepIndexOf = (arr, val) => {
+  //   for (let i = 0; i < arr.length; i++) {
+  //     if (lodash.isEqual(arr[i], val)) {
+  //       return i
+  //     }
+  //   }
+  //   return -1
+  // }
 
   useEffect(() => {
     getHistory(user)

@@ -6,6 +6,7 @@ import Accordion from 'react-bootstrap/Accordion'
 import StipeCheckoutForm from './CheckoutForm'
 import messages from '../AutoDismissAlert/messages'
 import { getHistory } from '../../api/shopping-cart'
+import { deepIndexOf } from '../../lib/deep-index-of'
 
 const Checkout = ({ user, msgAlert, customer }) => {
   const [shoppingCart, setShoppingCart] = useState({
@@ -22,7 +23,24 @@ const Checkout = ({ user, msgAlert, customer }) => {
       .then(data => {
         const carts = data.data.shoppingCart
         const activeCart = carts.find(cart => cart.active)
-        return setShoppingCart(activeCart)
+        const currCart = {
+          products: [],
+          quantities: [],
+          totalCost: 0
+        }
+        currCart.totalCost = activeCart.totalCost
+        for (let i = 0; i < activeCart.products.length; i++) {
+          const currProduct = activeCart.products[i]
+          if (deepIndexOf(currCart.products, currProduct) === -1) {
+            currCart.products.push(currProduct)
+            const index = deepIndexOf(currCart.products, currProduct)
+            currCart.quantities[index] = 1
+          } else {
+            const index = deepIndexOf(currCart.products, currProduct)
+            currCart.quantities[index] += 1
+          }
+        }
+        setShoppingCart(currCart)
       })
       .catch(error => {
         msgAlert({

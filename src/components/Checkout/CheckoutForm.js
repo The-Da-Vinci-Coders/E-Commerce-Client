@@ -5,6 +5,7 @@ import { getHistory, changeCartActive, createEmptyCart } from '../../api/shoppin
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Card from 'react-bootstrap/Card'
 
 const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
   const [show, setShow] = useState(false)
@@ -21,7 +22,9 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
   const onCancelPurchase = () => {
     handleClose()
     return (
-      <Redirect to='/shopping-cart' />
+      <div>
+        <Redirect to='/shopping-cart' />
+      </div>
     )
   }
   const handleChangeNumber = event => {
@@ -87,13 +90,19 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
             <Modal.Title className="title">Review Your Purchase</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {shoppingCart.products.map(product => (
+            {shoppingCart.products.map((product, index) => (
               <div key={product._id}>
-                <h5>{product.name}</h5>
-                <h6>Price:${convertDollar(product.cost)} </h6>
+                <Card className="container">
+                  <Card.Body className="cartCost row" >
+                    <Card.Img className="col-4" src={product.imageURL} />
+                    <div className="col-8">
+                      <Card.Title><h5>{product.name}:  {product.description}</h5></Card.Title>
+                      <Card.Text className="cartCost"> <p>{shoppingCart.quantities[index]} &emsp; for &emsp; ${convertDollar(product.cost * shoppingCart.quantities[index])}</p></Card.Text>
+                    </div>
+                  </Card.Body>
+                </Card>
               </div>
             ))}
-
           </Modal.Body>
           <Modal.Footer>
             <h3>Total:${convertDollar(shoppingCart.totalCost)} </h3>
