@@ -61,7 +61,9 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
         const activeCart = carts.find(cart => cart.active)
         activeCart.active = false
         const id = activeCart.id
+        console.log(id)
         const boolean = activeCart.active
+        console.log(boolean)
         changeCartActive(user, id, boolean)
       })
       .then(() => {

@@ -25,22 +25,22 @@ body{
 
 
 .container{
-  padding-top: 15px;
-  padding-bottom: 100vh !important;
   color: #1F4052 !important;
   font-family: 'Josefin Sans', sans-serif;
-
 }
 
-.row{
+.bodyContainer{
+  padding-top: 15px;
   padding-bottom: 100vh !important;
 }
+
+
 
 .card{
   margin: 15px;
   text-align: center;
   background-color: #1F4052 !important;
-  color: #EF5776;
+  color: #EF5776 !important;
   /* font-family: 'Playfair Display', serif;*/
   font-family: 'Josefin Slab', serif;
 }
@@ -69,6 +69,7 @@ body{
 }
 .removeLink:hover {
   color: darkRed;
+  cursor: pointer;
 }
 
 .cartCost{

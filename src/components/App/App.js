@@ -36,7 +36,7 @@ const App = () => {
           message={msgAlert.message}
         />
       ))}
-      <main className="container">
+      <main className="container bodyContainer" >
         <AuthenticatedRoute exact path='/shopping-cart' user={user} render={() => (
           <CurrentShoppingCart msgAlert={msgAlert} user={user}/>
         )} />

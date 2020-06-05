@@ -50,7 +50,7 @@ const ProductsPage = ({ user, msgAlert }) => {
           <h5> ${convertDollar(product.cost)} </h5>
           <p>{product.description}</p>
           <p>Category: {product.category}</p>
-          <Button onClick={() => onAddToCart(event, product)}>Add To Cart</Button>
+          {user && <Button onClick={() => onAddToCart(event, product)}>Add To Cart</Button>}
         </Card.Body>
       </Card>
     </div>
