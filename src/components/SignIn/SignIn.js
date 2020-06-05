@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 
 import { signIn } from '../../api/auth'
 import messages from '../AutoDismissAlert/messages'
-
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
@@ -80,6 +79,7 @@ class SignIn extends Component {
                 onChange={this.handleChange}
               />
             </Form.Group>
+            <p> New to Homepage Depot? <Link to="/sign-up">Sign Up Here</Link></p>
             <Button
               variant="primary"
               type="submit"
