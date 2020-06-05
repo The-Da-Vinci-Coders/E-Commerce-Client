@@ -39,26 +39,26 @@ const Checkout = ({ user, msgAlert, customer }) => {
       {console.log(shoppingCart)}
       <Accordion defaultActiveKey="0">
         <Card>
-          <Card.Header>
+          <Card.Header className="title">
         Billing Information
           </Card.Header>
           <Accordion.Collapse eventKey="0">
             <Card.Body><Form onSubmit={onShipSubmit}>
               <Form.Group controlId="formBasicAddress">
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text" placeholder="Line 1" />
+                <Form.Control className="creditForm" type="text" placeholder="Line 1" />
               </Form.Group>
               <Form.Group controlId="formBasicAddress">
                 <Form.Label>Address</Form.Label>
-                <Form.Control type="text" placeholder="Line 1" />
-                <Form.Control type="text" placeholder="Line 2" />
+                <Form.Control className="creditForm" type="text" placeholder="Line 1" />
+                <Form.Control className="creditForm" type="text" placeholder="Line 2" />
               </Form.Group>
               <Form.Group controlId="formBasicCity">
                 <Form.Label>City</Form.Label>
-                <Form.Control type="text" placeholder="City" />
+                <Form.Control className="creditForm" type="text" placeholder="City" />
               </Form.Group>
               <Form.Group controlId="formBasicState">
-                <Form.Control as="select">
+                <Form.Control className="creditForm" as="select">
                   <option value="AL">Alabama</option>
                   <option value="AK">Alaska</option>
                   <option value="AZ">Arizona</option>
@@ -114,11 +114,11 @@ const Checkout = ({ user, msgAlert, customer }) => {
               </Form.Group>
               <Form.Group controlId="formBasicZipCode">
                 <Form.Label>Zip Code</Form.Label>
-                <Form.Control type="number" placeholder="Zip Code" />
+                <Form.Control className="creditForm" type="number" placeholder="Zip Code" />
               </Form.Group>
               <Form.Group controlId="formBasicPhoneNumber">
                 <Form.Label>Phone Number</Form.Label>
-                <Form.Control type="tel" placeholder="Phone Number" />
+                <Form.Control className="creditForm" type="tel" placeholder="Phone Number" />
               </Form.Group>
               <Accordion.Toggle eventKey="1">
                 <Accordion.Toggle eventKey="0"><Button variant="primary" type="submit">

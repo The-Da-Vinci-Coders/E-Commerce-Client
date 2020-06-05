@@ -46,10 +46,10 @@ const ProductsPage = ({ user, msgAlert }) => {
       <Card style={{ width: '18rem' }} >
         <Card.Img variant="top" src={product.imageURL} />
         <Card.Body>
-          <Card.Title><h3>{product.name}</h3></Card.Title>
-          <h4> ${convertDollar(product.cost)} </h4>
+          <Card.Title><h5>{product.name}</h5></Card.Title>
+          <h5> ${convertDollar(product.cost)} </h5>
           <p>{product.description}</p>
-          <h6>Category: {product.category}</h6>
+          <p>Category: {product.category}</p>
           <Button onClick={() => onAddToCart(event, product)}>Add To Cart</Button>
         </Card.Body>
       </Card>
@@ -58,7 +58,7 @@ const ProductsPage = ({ user, msgAlert }) => {
 
   return (
     <div>
-      <h2>Available Products</h2>
+      <h2 className="title">Available Products</h2>
       <CardGroup>
         {productsMap}
       </CardGroup>

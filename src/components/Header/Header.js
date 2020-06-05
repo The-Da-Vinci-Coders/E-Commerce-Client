@@ -20,15 +20,14 @@ const unauthenticatedOptions = (
 
 const alwaysOptions = (
   <Fragment>
-    <Nav.Link to="/">Home</Nav.Link>
     <Nav.Link href="#products">Products</Nav.Link>
   </Fragment>
 )
 
 const Header = ({ user }) => (
-  <Navbar bg="primary" variant="dark" expand="md">
-    <Navbar.Brand href="#">
-      e-commerce-client
+  <Navbar className="navBar" expand="md">
+    <Navbar.Brand style={{ color: '#1F4052' }} className="navBar">
+      <strong>HOME PAGE DEPOT</strong>
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">

@@ -82,23 +82,24 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
       <div>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Review Your Purchase</Modal.Title>
+            <Modal.Title className="title">Review Your Purchase</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {shoppingCart.products.map(product => (
               <div key={product._id}>
-                <h3>{product.name}</h3>
+                <h5>{product.name}</h5>
                 <h6>Price:${convertDollar(product.cost)} </h6>
               </div>
             ))}
-            <h4>Total:${convertDollar(shoppingCart.totalCost)} </h4>
+
           </Modal.Body>
           <Modal.Footer>
+            <h3>Total:${convertDollar(shoppingCart.totalCost)} </h3>
             <Button variant="secondary" onClick={onCancelPurchase}>
-              Cancel Purchase
+              Cancel
             </Button>
             <Button variant="primary" onClick={handlePurchaseCompletion}>
-              Complete Purchase
+              Confirm
             </Button>
           </Modal.Footer>
         </Modal>
@@ -107,9 +108,11 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
             <Form.Label>Card Number</Form.Label>
             <Form.Control
               required
+              className="creditForm"
               type="text"
               name="number"
               value={number}
+              maxlength="16"
               placeholder="0000-0000-0000-0000"
               onChange={handleChangeNumber}
             />
@@ -119,8 +122,10 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
             <Form.Label>Month</Form.Label>
             <Form.Control
               required
+              className="creditForm"
               name="month"
               value={month}
+              maxlength="2"
               type="text"
               placeholder="00"
               onChange={handleChangeMonth}
@@ -128,18 +133,22 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
             <Form.Label>Year</Form.Label>
             <Form.Control
               required
+              className="creditForm"
               name="year"
               value={year}
               type="text"
+              maxlength="4"
               placeholder="0000"
               onChange={handleChangeYear}
             />
             <Form.Label>Cvc Number</Form.Label>
             <Form.Control
+              className="creditForm"
               required
               name="cvc"
               value={cvc}
               type="text"
+              maxlength="4"
               placeholder="000"
               onChange={handleChangeCvc}
             />
