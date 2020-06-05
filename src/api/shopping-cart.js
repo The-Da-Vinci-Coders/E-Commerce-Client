@@ -28,3 +28,18 @@ export const getHistory = user => {
     }
   })
 }
+
+export const changeCartActive = (user, id, boolean) => {
+  return axios({
+    url: apiUrl + `/shopping-cart/${id}/active`,
+    method: 'PATCH',
+    data: {
+      'shoppingCart': {
+        'active': boolean
+      }
+    },
+    headers: {
+      'Authorization': `Bearer ${user.token}`
+    }
+  })
+}

@@ -1,59 +1,91 @@
 import React, { useState, useEffect } from 'react'
 import { getProducts, addToCart } from '../../api/products'
-import { getHistory, createEmptyCart } from '../../api/shopping-cart'
-import { withRouter } from 'react-router-dom'
-
-const ProductsPage = ({ user, setMsgAlerts }) => {
+import { getHistory } from '../../api/shopping-cart'
+import { withRouter, Redirect } from 'react-router-dom'
+import messages from '../AutoDismissAlert/messages'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import CardGroup from 'react-bootstrap/CardGroup'
+import Form from 'react-bootstrap/Form'
+const ProductsPage = ({ user, msgAlert, setSearch }) => {
   const [products, setProducts] = useState([])
+  const [isSearch, setIsSearch] = useState(false)
+  const [localSearch, setLocalSearch] = useState('')
 
   useEffect(() => {
-    getProducts(user)
+    getProducts()
       .then(currProducts => {
         setProducts(currProducts.data.products)
       })
-      .catch(console.error)
-  }, [])
+      .catch(() => {
+        msgAlert({
+          heading: 'Product Search Failed',
+          message: messages.getProductsFailure,
+          variant: 'danger'
+        })
+      })
+  }, [isSearch])
 
   const onAddToCart = (event, product) => {
     // get all shopping carts belonging to current user
     getHistory(user)
-      // if this goes fine, take the carts and find the active cart
       .then(data => {
         const carts = data.data.shoppingCart
-        return carts
+        // find the current active cart
+        const activeCart = carts.find(cart => cart.active)
+        console.log(product)
+        addToCart(activeCart._id, product, user)
       })
-      .then(activeCart => {
-        let newCart
-        // if there is no active cart
-        if (!activeCart) {
-          // make a new empty one
-          newCart = createEmptyCart(user)
-        // if there is, we just want to return it
-        } else {
-          newCart = activeCart
-        }
-        return newCart
-      })
-      .then(newCart => addToCart(newCart._id, product, user))
-      .then(console.log)
       .catch(console.error)
   }
 
-  const productsMap = products.map(product => (
-    <li key={product._id}>
-      <h3>Name: {product.name}</h3>
-      <h5>Description: {product.description}</h5>
-      <h5>Category: {product.category}</h5>
-      <button onClick={() => onAddToCart(event, product)}>Add To Cart</button>
-    </li>
-  ))
+  const convertDollar = (num) => {
+    const total = num * 0.01
+    return total.toFixed(2)
+  }
 
-  return (
-    <div>
-      <h2>Available Products</h2>
-      {productsMap}
-    </div>
-  )
+  const handleChange = event => {
+    setLocalSearch(event.target.value)
+  }
+
+  const onSubmit = event => {
+    event.preventDefault()
+    console.log(localSearch)
+    setSearch(localSearch)
+    setIsSearch(true)
+  }
+
+  if (!isSearch) {
+    return (
+      <div>
+        <h2>Available Products</h2>
+        <Form inline onSubmit={onSubmit}>
+          <Form.Control type="text" placeholder="Search" onChange={handleChange} value={localSearch} />
+          <Button type="submit" variant="outline-info">Search</Button>
+        </Form>
+        <CardGroup>
+          {products.map(product => (
+            <div key={product._id}>
+              <Card style={{ width: '18rem' }} >
+                <Card.Img variant="top" src={product.imageURL} />
+                <Card.Body>
+                  <Card.Title><h3>{product.name}</h3></Card.Title>
+                  <h4> ${convertDollar(product.cost)} </h4>
+                  <p>{product.description}</p>
+                  <h6>Category: {product.category}</h6>
+                  <Button onClick={() => onAddToCart(event, product)}>Add To Cart</Button>
+                </Card.Body>
+              </Card>
+            </div>
+          ))}
+        </CardGroup>
+      </div>
+    )
+  } else {
+    return (
+      <Redirect to="/search-products"/>
+    )
+  }
 }
 
 export default withRouter(ProductsPage)
