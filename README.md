@@ -3,13 +3,13 @@
 Homepage Depot is a full stack E-Commerce application integrated with the Stripe API to allow users to authenticate, add products to a shopping cart, and make secure purchases with a credit card.
 
 ## Repositories
-Client: https://github.com/The-Da-Vinci-Coders/E-Commerce-Client
-API: https://github.com/The-Da-Vinci-Coders/E-Commerce-API
+Client: [Client](https://github.com/The-Da-Vinci-Coders/E-Commerce-Client)
+API: [API](https://github.com/The-Da-Vinci-Coders/E-Commerce-API)
 
 
 ## Deployed Sites
-Client:
-API: https://warm-beyond-78319.herokuapp.com/
+Client: [Client](https://the-da-vinci-coders.github.io/E-Commerce-Client/)
+API: [API](https://warm-beyond-78319.herokuapp.com/)
 
 
 ## List of technologies used
