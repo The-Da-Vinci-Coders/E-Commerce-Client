@@ -5,9 +5,9 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 const authenticatedOptions = (
   <Fragment>
     <NavDropdown title="My Account" id="basic-nav-dropdown">
-      <NavDropdown.Item><Nav.Link href="#change-password">Change Password</Nav.Link></NavDropdown.Item>
-      <NavDropdown.Item><Nav.Link href="#sign-out">Sign Out</Nav.Link></NavDropdown.Item>
-      <NavDropdown.Item><Nav.Link href="#get-history">View Past Purchases</Nav.Link></NavDropdown.Item>
+      <NavDropdown.Item href="#change-password"><Nav.Link href="#change-password">Change Password</Nav.Link></NavDropdown.Item>
+      <NavDropdown.Item href="#sign-out"><Nav.Link href="#sign-out">Sign Out</Nav.Link></NavDropdown.Item>
+      <NavDropdown.Item href="#get-history"><Nav.Link href="#get-history">View Past Purchases</Nav.Link></NavDropdown.Item>
     </NavDropdown>
     <Nav.Link href="#shopping-cart">My Cart</Nav.Link>
   </Fragment>
@@ -29,11 +29,7 @@ const alwaysOptions = (
 const Header = ({ user }) => (
   <Navbar className="navBar" expand="md">
     <Navbar.Brand style={{ color: '#1F4052' }} className="navBar">
-<<<<<<< HEAD
       <strong>HOMEPAGE DEPOT</strong>
-=======
-      <strong>HOMEPAGE DEPOT</strong>
->>>>>>> Update styling
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">

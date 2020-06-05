@@ -69,14 +69,30 @@ body{
 }
 .removeLink:hover {
   color: darkRed;
-<<<<<<< HEAD
   cursor: pointer;
-=======
-  cursor: pointer;
->>>>>>> Update styling
+}
+
+.uglyButton{
+  visibility: hidden;
+}
+
+.goodButton{
+  visibility: visible;
 }
 
 .cartCost{
   text-align: right !important;
+}
+
+.formText{
+  color:#EF5776;
+  text-align: left;
+}
+
+addressMargin{
+  padding-bottom: 10px !important;
+}
+.billingButton{
+  text-align: center;
 }
 @import '~bootstrap/scss/bootstrap';

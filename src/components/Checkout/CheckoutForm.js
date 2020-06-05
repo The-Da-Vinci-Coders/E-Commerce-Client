@@ -104,56 +104,63 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group>
-            <Form.Label>Card Number</Form.Label>
-            <Form.Control
-              required
-              className="creditForm"
-              type="text"
-              name="number"
-              value={number}
-              maxlength="16"
-              placeholder="0000-0000-0000-0000"
-              onChange={handleChangeNumber}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Expiration</Form.Label>
-            <Form.Label>Month</Form.Label>
-            <Form.Control
-              required
-              className="creditForm"
-              name="month"
-              value={month}
-              maxlength="2"
-              type="text"
-              placeholder="00"
-              onChange={handleChangeMonth}
-            />
-            <Form.Label>Year</Form.Label>
-            <Form.Control
-              required
-              className="creditForm"
-              name="year"
-              value={year}
-              type="text"
-              maxlength="4"
-              placeholder="0000"
-              onChange={handleChangeYear}
-            />
-            <Form.Label>Cvc Number</Form.Label>
-            <Form.Control
-              className="creditForm"
-              required
-              name="cvc"
-              value={cvc}
-              type="text"
-              maxlength="4"
-              placeholder="000"
-              onChange={handleChangeCvc}
-            />
-          </Form.Group>
+        <Form onSubmit={handleSubmit} className="container">
+          <div>
+            <Form.Group className="col-12 formText row">
+              <Form.Label>Card Number</Form.Label>
+              <Form.Control
+                required
+                className="creditForm"
+                type="text"
+                name="number"
+                value={number}
+                maxlength="16"
+                placeholder="0000-0000-0000-0000"
+                onChange={handleChangeNumber}
+              />
+            </Form.Group>
+            <Form.Group className="row formText">
+              <div className="col-3">
+                <Form.Label>Month</Form.Label>
+                <Form.Control
+                  required
+                  className="creditForm"
+                  name="month"
+                  value={month}
+                  maxlength="2"
+                  type="text"
+                  placeholder="00"
+                  onChange={handleChangeMonth}
+                />
+              </div>
+              <div className="col-3">
+                <Form.Label>Year</Form.Label>
+                <Form.Control
+                  required
+                  className="creditForm"
+                  name="year"
+                  value={year}
+                  type="text"
+                  maxlength="4"
+                  placeholder="0000"
+                  onChange={handleChangeYear}
+                />
+              </div>
+              <div className="col-3 formDiv">
+                <Form.Label>Cvc Number</Form.Label>
+                <Form.Control
+                  className="creditForm"
+                  required
+                  name="cvc"
+                  value={cvc}
+                  type="text"
+                  maxlength="4"
+                  placeholder="000"
+                  onChange={handleChangeCvc}
+                />
+              </div>
+            </Form.Group>
+          </div>
           <Button type="submit" variant="primary">
             Submit
           </Button>
