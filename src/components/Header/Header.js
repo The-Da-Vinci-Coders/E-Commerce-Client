@@ -30,7 +30,7 @@ const Header = ({ user }) => (
 <<<<<<< HEAD
       <strong>HOMEPAGE DEPOT</strong>
 =======
-      <strong>HOME PAGE DEPOT</strong>
+      <strong>HOMEPAGE DEPOT</strong>
 >>>>>>> Update styling
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
