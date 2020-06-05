@@ -5,7 +5,7 @@ import { withRouter, Link } from 'react-router-dom'
 import messages from '../AutoDismissAlert/messages'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
-import lodash from 'lodash'
+import { deepIndexOf } from '../../lib/deep-index-of'
 // import CardGroup from 'react-bootstrap/CardGroup'
 
 const CurrentShoppingCart = ({ user, msgAlert, match }) => {
@@ -16,14 +16,14 @@ const CurrentShoppingCart = ({ user, msgAlert, match }) => {
   })
   const [rerender, setRerender] = useState(false)
 
-  const deepIndexOf = (arr, val) => {
-    for (let i = 0; i < arr.length; i++) {
-      if (lodash.isEqual(arr[i], val)) {
-        return i
-      }
-    }
-    return -1
-  }
+  // const deepIndexOf = (arr, val) => {
+  //   for (let i = 0; i < arr.length; i++) {
+  //     if (lodash.isEqual(arr[i], val)) {
+  //       return i
+  //     }
+  //   }
+  //   return -1
+  // }
 
   useEffect(() => {
     getHistory(user)
@@ -83,23 +83,25 @@ const CurrentShoppingCart = ({ user, msgAlert, match }) => {
 
   return (
     <div>
-      <h2>Shopping Cart</h2>
+      <h2 className="title">Shopping Cart</h2>
       {shoppingCart.products.map((product, index) => (
         <div key={product._id}>
-          <Card>
-            <Card.Body>
-              <Card.Title><h3>{product.name}</h3></Card.Title>
-              <Card.Text><h5>{product.description}</h5></Card.Text>
-              <Card.Text><h5>{shoppingCart.quantities[index]}</h5></Card.Text>
-              <Card.Text><h6>${convertDollar(product.cost * shoppingCart.quantities[index])}</h6></Card.Text>
-              <Button variant="danger" onClick={() => onRemoveFromCart(event, product)}>Remove</Button>
+          <Card className="container">
+            <Card.Body className="cartCost row" >
+              <Card.Img className="col-4" src={product.imageURL} />
+              <div className="col-8">
+                <Card.Title><h5>{product.name}:  {product.description}</h5></Card.Title>
+                <Card.Text className="cartCost"> <p>{shoppingCart.quantities[index]} &emsp; for &emsp; ${convertDollar(product.cost * shoppingCart.quantities[index])}</p></Card.Text>
+                <h5 className="removeLink" onClick={() => onRemoveFromCart(event, product)}>remove</h5>
+              </div>
             </Card.Body>
           </Card>
         </div>
       ))}
-
-      <h3>Total:${convertDollar(shoppingCart.totalCost)}  </h3>
-      <Link to={'/checkout'}><Button variant="success">Check Out</Button></Link>
+      <div className="moveRight">
+        <h3> Total:${convertDollar(shoppingCart.totalCost)}</h3>
+        <Link to={'/checkout'}><Button className="moveRight" variant="primary">Check Out</Button></Link>
+      </div>
     </div>
   )
 }

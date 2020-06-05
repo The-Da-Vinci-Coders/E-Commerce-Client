@@ -17,7 +17,6 @@ class SignOut extends Component {
       .finally(() => history.push('/'))
       .finally(() => {
         this.props.setCustomer(null)
-        console.log(this.props.customer)
       })
       .finally(() => clearUser())
   }

@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 
 import AuthenticatedRoute from '../AuthenticatedRoute/AuthenticatedRoute'
 import AutoDismissAlert from '../AutoDismissAlert/AutoDismissAlert'
@@ -38,7 +38,8 @@ const App = () => {
           message={msgAlert.message}
         />
       ))}
-      <main className="container">
+      <main className="container bodyContainer" >
+        <Redirect from="/" to="/products" />
         <AuthenticatedRoute exact path='/shopping-cart' user={user} render={() => (
           <CurrentShoppingCart msgAlert={msgAlert} user={user}/>
         )} />

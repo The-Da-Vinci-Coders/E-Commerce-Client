@@ -1,1 +1,102 @@
+$theme-colors: (
+  "primary": #EF5776
+);
+
+.navBar {
+  color: #1F4052;
+  background-color: #00C2C4;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+main{
+  background-color: #FECCB0;
+  margin-bottom: 25px !important;
+}
+body{
+  background-color: #1F4052 !important;
+  color: #1F4052;
+  /* font-family: 'Playfair Display', serif; */
+  font-family: 'Josefin Slab', serif;
+}
+
+.title {
+  text-align: center;
+}
+
+
+.container{
+  color: #1F4052 !important;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.bodyContainer{
+  padding-top: 15px;
+  padding-bottom: 100vh !important;
+}
+
+
+
+.card{
+  margin: 15px;
+  text-align: center;
+  background-color: #1F4052 !important;
+  color: #EF5776 !important;
+  /* font-family: 'Playfair Display', serif;*/
+  font-family: 'Josefin Slab', serif;
+}
+
+.moveRight {
+  text-align: right;
+  justify-content: flex-end;
+  padding-right: 25px;
+  padding-top: 20px;
+}
+
+.form-control {
+  color: #1F4052 !important;
+}
+
+.creditForm {
+  background-color: #FECCB0 !important;
+}
+
+.removeLink{
+  color: red;
+}
+.modal-content{
+  background-color: #1F4052 !important;
+  color:#EF5776;
+}
+.removeLink:hover {
+  color: darkRed;
+  cursor: pointer;
+}
+
+.uglyButton{
+  visibility: hidden;
+}
+
+.search-btn {
+  margin-left: 5px;
+}
+
+.goodButton{
+  visibility: visible;
+}
+
+.cartCost{
+  text-align: right !important;
+}
+
+.formText{
+  color:#EF5776;
+  text-align: left;
+}
+
+addressMargin{
+  padding-bottom: 10px !important;
+}
+.billingButton{
+  text-align: center;
+}
 @import '~bootstrap/scss/bootstrap';

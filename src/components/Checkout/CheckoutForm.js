@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { createCardToken, addCardToken, sendCharge } from '../../api/stripe'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
+import messages from '../AutoDismissAlert/messages'
 import { getHistory, changeCartActive, createEmptyCart } from '../../api/shopping-cart'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Card from 'react-bootstrap/Card'
 
-const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
+const StipeCheckoutForm = ({ shoppingCart, msgAlert, user, customer }) => {
   const [show, setShow] = useState(false)
   const [number, setNumber] = useState('')
   const [month, setMonth] = useState('')
@@ -18,12 +20,6 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
-  const onCancelPurchase = () => {
-    handleClose()
-    return (
-      <Redirect to='/shopping-cart' />
-    )
-  }
   const handleChangeNumber = event => {
     setNumber(event.target.value)
   }
@@ -42,15 +38,19 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
     createCardToken(number, month, year, cvc)
       .then(data => {
         const token = data.data.card.id
-        // setCardToken(data.data.card.id)
-        // console.log(cardToken)
         return token
       })
       .then(token => {
         addCardToken(token, customer)
       })
       .then(() => handleShow())
-      .catch(console.error)
+      .catch(() => {
+        msgAlert({
+          heading: 'Checkout Failed',
+          message: messages.checkoutFailure,
+          variant: 'danger'
+        })
+      })
   }
 
   const handlePurchaseCompletion = () => {
@@ -69,7 +69,13 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
       })
       .then(() => handleClose())
       .then(() => setRedirect(true))
-      .catch(console.error)
+      .catch(() => {
+        msgAlert({
+          heading: 'Checkout Failed',
+          message: messages.checkoutCompleteFailure,
+          variant: 'danger'
+        })
+      })
   }
 
   const convertDollar = (num) => {
@@ -82,68 +88,90 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
       <div>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Review Your Purchase</Modal.Title>
+            <Modal.Title className="title">Review Your Purchase</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {shoppingCart.products.map(product => (
+            {shoppingCart.products.map((product, index) => (
               <div key={product._id}>
-                <h3>{product.name}</h3>
-                <h6>Price:${convertDollar(product.cost)} </h6>
+                <Card className="container">
+                  <Card.Body className="cartCost row" >
+                    <Card.Img className="col-4" src={product.imageURL} />
+                    <div className="col-8">
+                      <Card.Title><h5>{product.name}:  {product.description}</h5></Card.Title>
+                      <Card.Text className="cartCost"> <p>{shoppingCart.quantities[index]} &emsp; for &emsp; ${convertDollar(product.cost * shoppingCart.quantities[index])}</p></Card.Text>
+                    </div>
+                  </Card.Body>
+                </Card>
               </div>
             ))}
-            <h4>Total:${convertDollar(shoppingCart.totalCost)} </h4>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={onCancelPurchase}>
-              Cancel Purchase
-            </Button>
+            <h3>Total:${convertDollar(shoppingCart.totalCost)} </h3>
+            <Link to='/shopping-cart'><Button variant="secondary" onClick={handleClose}>
+              Cancel
+            </Button></Link>
             <Button variant="primary" onClick={handlePurchaseCompletion}>
-              Complete Purchase
+              Confirm
             </Button>
           </Modal.Footer>
         </Modal>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group>
-            <Form.Label>Card Number</Form.Label>
-            <Form.Control
-              required
-              type="text"
-              name="number"
-              value={number}
-              placeholder="0000-0000-0000-0000"
-              onChange={handleChangeNumber}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Expiration</Form.Label>
-            <Form.Label>Month</Form.Label>
-            <Form.Control
-              required
-              name="month"
-              value={month}
-              type="text"
-              placeholder="00"
-              onChange={handleChangeMonth}
-            />
-            <Form.Label>Year</Form.Label>
-            <Form.Control
-              required
-              name="year"
-              value={year}
-              type="text"
-              placeholder="0000"
-              onChange={handleChangeYear}
-            />
-            <Form.Label>Cvc Number</Form.Label>
-            <Form.Control
-              required
-              name="cvc"
-              value={cvc}
-              type="text"
-              placeholder="000"
-              onChange={handleChangeCvc}
-            />
-          </Form.Group>
+        <Form onSubmit={handleSubmit} className="container">
+          <div>
+            <Form.Group className="col-12 formText row">
+              <Form.Label>Card Number</Form.Label>
+              <Form.Control
+                required
+                className="creditForm"
+                type="text"
+                name="number"
+                value={number}
+                maxlength="16"
+                placeholder="0000-0000-0000-0000"
+                onChange={handleChangeNumber}
+              />
+            </Form.Group>
+            <Form.Group className="row formText">
+              <div className="col-3">
+                <Form.Label>Month</Form.Label>
+                <Form.Control
+                  required
+                  className="creditForm"
+                  name="month"
+                  value={month}
+                  maxlength="2"
+                  type="text"
+                  placeholder="00"
+                  onChange={handleChangeMonth}
+                />
+              </div>
+              <div className="col-3">
+                <Form.Label>Year</Form.Label>
+                <Form.Control
+                  required
+                  className="creditForm"
+                  name="year"
+                  value={year}
+                  type="text"
+                  maxlength="4"
+                  placeholder="0000"
+                  onChange={handleChangeYear}
+                />
+              </div>
+              <div className="col-3 formDiv">
+                <Form.Label>Cvc Number</Form.Label>
+                <Form.Control
+                  className="creditForm"
+                  required
+                  name="cvc"
+                  value={cvc}
+                  type="text"
+                  maxlength="4"
+                  placeholder="000"
+                  onChange={handleChangeCvc}
+                />
+              </div>
+            </Form.Group>
+          </div>
           <Button type="submit" variant="primary">
             Submit
           </Button>
