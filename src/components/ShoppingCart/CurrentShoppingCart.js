@@ -8,7 +8,7 @@ import Card from 'react-bootstrap/Card'
 import { deepIndexOf } from '../../lib/deep-index-of'
 // import CardGroup from 'react-bootstrap/CardGroup'
 
-const CurrentShoppingCart = ({ user, setMsgAlert, match }) => {
+const CurrentShoppingCart = ({ user, msgAlert, match }) => {
   const [shoppingCart, setShoppingCart] = useState({
     products: [],
     quantities: [],
@@ -50,7 +50,7 @@ const CurrentShoppingCart = ({ user, setMsgAlert, match }) => {
         setShoppingCart(currCart)
       })
       .catch(() => {
-        setMsgAlert({
+        msgAlert({
           heading: 'Shopping Cart Failed',
           message: messages.getCartFailure,
           variant: 'danger'
@@ -68,7 +68,7 @@ const CurrentShoppingCart = ({ user, setMsgAlert, match }) => {
       })
       .then(() => setRerender(!rerender))
       .catch(() => {
-        setMsgAlert({
+        msgAlert({
           heading: 'Shopping Cart Failed',
           message: messages.removeCartFailure,
           variant: 'danger'

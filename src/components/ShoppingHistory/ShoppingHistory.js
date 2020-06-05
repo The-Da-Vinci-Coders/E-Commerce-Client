@@ -5,7 +5,7 @@ import messages from '../AutoDismissAlert/messages'
 import Card from 'react-bootstrap/Card'
 import { deepIndexOf } from '../../lib/deep-index-of'
 
-const ShoppingHistory = ({ user, setMsgAlert }) => {
+const ShoppingHistory = ({ user, msgAlert }) => {
   const [shoppingHistory, setShoppingHistory] = useState([])
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const ShoppingHistory = ({ user, setMsgAlert }) => {
         setShoppingHistory(inactiveWithQuantity)
       })
       .catch(() => {
-        setMsgAlert({
+        msgAlert({
           heading: 'Purchase History Failed',
           message: messages.getPurchaseHistory,
           variant: 'danger'
