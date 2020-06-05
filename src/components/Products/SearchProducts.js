@@ -17,8 +17,6 @@ const SearchProducts = ({ search, user, msgAlert, setSearch }) => {
     getProducts()
       .then(data => {
         const products = data.data.products
-        console.log(products)
-        console.log(search)
         const searchQuery = search.toUpperCase()
         const queries = searchQuery.split(' ')
         const result = []
@@ -65,10 +63,15 @@ const SearchProducts = ({ search, user, msgAlert, setSearch }) => {
         const carts = data.data.shoppingCart
         // find the current active cart
         const activeCart = carts.find(cart => cart.active)
-        console.log(product)
         addToCart(activeCart._id, product, user)
       })
-      .catch(console.error)
+      .catch(() => {
+        msgAlert({
+          heading: 'Add To Cart Failed',
+          message: messages.addToCartFailure,
+          variant: 'danger'
+        })
+      })
   }
 
   const convertDollar = (num) => {
@@ -86,31 +89,45 @@ const SearchProducts = ({ search, user, msgAlert, setSearch }) => {
     setReloadResults(!reloadResults)
   }
 
-  return (
-    <div>
-      <h2>Search Results</h2>
-      <Form inline onSubmit={onSubmit}>
-        <Form.Control type="text" placeholder="Search" onChange={handleChange} value={localSearch} />
-        <Button type="submit" variant="outline-info">Search</Button>
-      </Form>
-      <CardGroup>
-        {products.map(product => (
-          <div key={product._id}>
-            <Card style={{ width: '18rem' }} >
-              <Card.Img variant="top" src={product.imageURL} />
-              <Card.Body>
-                <Card.Title><h3>{product.name}</h3></Card.Title>
-                <h4> ${convertDollar(product.cost)} </h4>
-                <p>{product.description}</p>
-                <h6>Category: {product.category}</h6>
-                {user && <Button onClick={() => onAddToCart(event, product)}>Add To Cart</Button>}
-              </Card.Body>
-            </Card>
-          </div>
-        ))}
-      </CardGroup>
-    </div>
-  )
+  if (products.length > 0) {
+    return (
+      <div>
+        <h2>Search Results</h2>
+        <Form inline onSubmit={onSubmit}>
+          <Form.Control type="text" placeholder="Search" onChange={handleChange} value={localSearch} />
+          <Button className='search-btn' type="submit" variant="outline-info">Search</Button>
+        </Form>
+        <CardGroup>
+          {products.map(product => (
+            <div key={product._id}>
+              <Card style={{ width: '18rem' }} >
+                <Card.Img variant="top" src={product.imageURL} />
+                <Card.Body>
+                  <Card.Title><h3>{product.name}</h3></Card.Title>
+                  <h4> ${convertDollar(product.cost)} </h4>
+                  <p>{product.description}</p>
+                  <h6>Category: {product.category}</h6>
+                  {user && <Button onClick={() => onAddToCart(event, product)}>Add To Cart</Button>}
+                </Card.Body>
+              </Card>
+            </div>
+          ))}
+        </CardGroup>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h2>Search Results</h2>
+        <Form inline onSubmit={onSubmit}>
+          <Form.Control type="text" placeholder="Search" onChange={handleChange} value={localSearch} />
+          <Button className='search-btn' type="submit" variant="outline-info">Search</Button>
+        </Form>
+        <br />
+        <h4>Sorry! Nothing matched your search. Please try again.</h4>
+      </div>
+    )
+  }
 }
 
 export default withRouter(SearchProducts)

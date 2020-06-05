@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { createCardToken, addCardToken, sendCharge } from '../../api/stripe'
 import { Redirect, Link } from 'react-router-dom'
+import messages from '../AutoDismissAlert/messages'
 import { getHistory, changeCartActive, createEmptyCart } from '../../api/shopping-cart'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Card from 'react-bootstrap/Card'
 
-const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
+const StipeCheckoutForm = ({ shoppingCart, msgAlert, user, customer }) => {
   const [show, setShow] = useState(false)
   const [number, setNumber] = useState('')
   const [month, setMonth] = useState('')
@@ -37,15 +38,19 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
     createCardToken(number, month, year, cvc)
       .then(data => {
         const token = data.data.card.id
-        // setCardToken(data.data.card.id)
-        // console.log(cardToken)
         return token
       })
       .then(token => {
         addCardToken(token, customer)
       })
       .then(() => handleShow())
-      .catch(console.error)
+      .catch(() => {
+        msgAlert({
+          heading: 'Checkout Failed',
+          message: messages.checkoutFailure,
+          variant: 'danger'
+        })
+      })
   }
 
   const handlePurchaseCompletion = () => {
@@ -64,7 +69,13 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
       })
       .then(() => handleClose())
       .then(() => setRedirect(true))
-      .catch(console.error)
+      .catch(() => {
+        msgAlert({
+          heading: 'Checkout Failed',
+          message: messages.checkoutCompleteFailure,
+          variant: 'danger'
+        })
+      })
   }
 
   const convertDollar = (num) => {

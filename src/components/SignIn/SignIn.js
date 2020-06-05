@@ -31,7 +31,6 @@ class SignIn extends Component {
       })
       .then(stripeId => {
         this.props.setCustomer(stripeId)
-        console.log(stripeId)
       })
       .then(() => msgAlert({
         heading: 'Sign In Success',

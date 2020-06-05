@@ -42,19 +42,17 @@ const Checkout = ({ user, msgAlert, customer }) => {
         }
         setShoppingCart(currCart)
       })
-      .catch(error => {
+      .catch(() => {
         msgAlert({
           heading: 'Shopping Cart Failed',
           message: messages.getCartFailure,
           variant: 'danger'
         })
-        console.error(error)
       })
   }, [])
 
   return (
     <div>
-      {console.log(shoppingCart)}
       <Accordion defaultActiveKey="0">
         <Card>
           <Card.Header className="title">
@@ -170,6 +168,7 @@ const Checkout = ({ user, msgAlert, customer }) => {
                 shoppingCart={shoppingCart}
                 user={user}
                 customer={customer}
+                msgAlert={msgAlert}
               /> </Card.Body>
           </Accordion.Collapse>
         </Card>

@@ -34,7 +34,6 @@ const ShoppingHistory = ({ user, msgAlert }) => {
           }
           return currCart
         })
-        console.log(inactiveWithQuantity)
         setShoppingHistory(inactiveWithQuantity)
       })
       .catch(() => {
