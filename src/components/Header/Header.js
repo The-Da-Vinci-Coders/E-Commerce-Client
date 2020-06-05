@@ -27,7 +27,11 @@ const alwaysOptions = (
 const Header = ({ user }) => (
   <Navbar className="navBar" expand="md">
     <Navbar.Brand style={{ color: '#1F4052' }} className="navBar">
+<<<<<<< HEAD
       <strong>HOMEPAGE DEPOT</strong>
+=======
+      <strong>HOME PAGE DEPOT</strong>
+>>>>>>> Update styling
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
