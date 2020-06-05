@@ -9,6 +9,7 @@ import SignIn from '../SignIn/SignIn'
 import SignOut from '../SignOut/SignOut'
 import ChangePassword from '../ChangePassword/ChangePassword'
 import ProductsPage from '../Products/ProductsPage'
+import SearchProducts from '../Products/SearchProducts'
 import Checkout from '../Checkout/Checkout'
 import CurrentShoppingCart from '../ShoppingCart/CurrentShoppingCart'
 import ShoppingHistory from '../ShoppingHistory/ShoppingHistory'
@@ -18,6 +19,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [customer, setCustomer] = useState(null)
   const [msgAlerts, setMsgAlerts] = useState([])
+  const [search, setSearch] = useState('')
 
   const clearUser = () => setUser(null)
 
@@ -44,7 +46,10 @@ const App = () => {
           <Checkout msgAlert={msgAlert} user={user} customer={customer}/>
         )} />
         <Route path='/products' render={() => (
-          <ProductsPage msgAlert={msgAlert} user={user}/>
+          <ProductsPage msgAlert={msgAlert} user={user} setSearch={setSearch}/>
+        )} />
+        <Route path='/search-products' render={() => (
+          <SearchProducts msgAlert={msgAlert} user={user} search={search} setSearch={setSearch}/>
         )} />
         <Route path='/sign-up' render={() => (
           <SignUp msgAlert={msgAlert} setUser={setUser} setCustomer={setCustomer}/>
