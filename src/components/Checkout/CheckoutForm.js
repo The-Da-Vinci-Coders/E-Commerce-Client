@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { createCardToken, addCardToken, sendCharge } from '../../api/stripe'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { getHistory, changeCartActive, createEmptyCart } from '../../api/shopping-cart'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
@@ -19,14 +19,6 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
-  const onCancelPurchase = () => {
-    handleClose()
-    return (
-      <div>
-        <Redirect to='/shopping-cart' />
-      </div>
-    )
-  }
   const handleChangeNumber = event => {
     setNumber(event.target.value)
   }
@@ -64,9 +56,7 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
         const activeCart = carts.find(cart => cart.active)
         activeCart.active = false
         const id = activeCart.id
-        console.log(id)
         const boolean = activeCart.active
-        console.log(boolean)
         changeCartActive(user, id, boolean)
       })
       .then(() => {
@@ -106,9 +96,9 @@ const StipeCheckoutForm = ({ shoppingCart, user, customer }) => {
           </Modal.Body>
           <Modal.Footer>
             <h3>Total:${convertDollar(shoppingCart.totalCost)} </h3>
-            <Button variant="secondary" onClick={onCancelPurchase}>
+            <Link to='/shopping-cart'><Button variant="secondary" onClick={handleClose}>
               Cancel
-            </Button>
+            </Button></Link>
             <Button variant="primary" onClick={handlePurchaseCompletion}>
               Confirm
             </Button>
