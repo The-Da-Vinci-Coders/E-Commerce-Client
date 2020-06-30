@@ -27,8 +27,9 @@ class SignUp extends Component {
     let userId = null
     let userToken = null
     const { msgAlert, history, setUser } = this.props
+    const { email, password } = this.state
     signUp(this.state)
-      .then(() => signIn(this.state))
+      .then(() => signIn(email, password))
       .then(data => {
         userId = data.data.user._id
         userToken = data.data.user.token
