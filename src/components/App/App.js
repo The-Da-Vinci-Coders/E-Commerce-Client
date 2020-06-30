@@ -20,8 +20,12 @@ const App = () => {
   const [customer, setCustomer] = useState(null)
   const [msgAlerts, setMsgAlerts] = useState([])
   const [search, setSearch] = useState('')
+  const [isGuest, setIsGuest] = useState(false)
 
-  const clearUser = () => setUser(null)
+  const clearUser = () => {
+    setUser(null)
+    setIsGuest(false)
+  }
 
   const msgAlert = ({ heading, message, variant }) => {
     setMsgAlerts([...msgAlerts, { heading, message, variant }])
@@ -29,7 +33,7 @@ const App = () => {
 
   return (
     <Fragment>
-      <Header user={user} />
+      <Header user={user} setIsGuest={setIsGuest}/>
       {msgAlerts.map((msgAlert, index) => (
         <AutoDismissAlert
           key={index}
@@ -56,7 +60,7 @@ const App = () => {
           <SignUp msgAlert={msgAlert} setUser={setUser} setCustomer={setCustomer}/>
         )} />
         <Route path='/sign-in' render={() => (
-          <SignIn msgAlert={msgAlert} setUser={setUser} setCustomer={setCustomer}/>
+          <SignIn msgAlert={msgAlert} setUser={setUser} setCustomer={setCustomer} isGuest={isGuest}/>
         )} />
         <AuthenticatedRoute user={user} path='/sign-out' render={() => (
           <SignOut msgAlert={msgAlert} clearUser={clearUser} user={user} customer={customer} setCustomer={setCustomer}/>

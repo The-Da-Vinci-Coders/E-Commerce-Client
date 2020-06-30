@@ -13,12 +13,13 @@ const authenticatedOptions = (
   </Fragment>
 )
 
-const unauthenticatedOptions = (
-  <Fragment>
-    <Nav.Link href="#sign-up">Sign Up</Nav.Link>
-    <Nav.Link href="#sign-in">Sign In</Nav.Link>
-  </Fragment>
-)
+// const unauthenticatedOptions = (
+//   <Fragment>
+//     <Nav.Link href="#sign-up">Sign Up</Nav.Link>
+//     <Nav.Link href="#sign-in">Sign In</Nav.Link>
+//     <Nav.Link href="#sign-in">Sign In As Guest</Nav.Link>
+//   </Fragment>
+// )
 
 const alwaysOptions = (
   <Fragment>
@@ -26,20 +27,32 @@ const alwaysOptions = (
   </Fragment>
 )
 
-const Header = ({ user }) => (
-  <Navbar className="navBar" expand="md">
-    <Navbar.Brand style={{ color: '#1F4052' }} className="navBar">
-      <strong>HOMEPAGE DEPOT</strong>
-    </Navbar.Brand>
-    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="ml-auto">
-        { user && <span className="navbar-text mr-2">Welcome, {user.email}</span>}
-        { alwaysOptions }
-        { user ? authenticatedOptions : unauthenticatedOptions }
-      </Nav>
-    </Navbar.Collapse>
-  </Navbar>
-)
+const Header = ({ user, setIsGuest }) => {
+  const onGuestLogin = () => {
+    setIsGuest(true)
+  }
+  return (
+    <Navbar className="navBar" expand="md">
+      <Navbar.Brand style={{ color: '#1F4052' }} className="navBar">
+        <strong>HOMEPAGE DEPOT</strong>
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="ml-auto">
+          { user && <span className="navbar-text mr-2">Welcome, {user.email}</span>}
+          { alwaysOptions }
+          { user ? authenticatedOptions : (
+            <Fragment>
+              <Nav.Link href="#sign-up">Sign Up</Nav.Link>
+              <Nav.Link href="#sign-in">Sign In</Nav.Link>
+              <Nav.Link href="#sign-in" onClick={onGuestLogin}>Sign In As Guest</Nav.Link>
+            </Fragment>
+          )
+          }
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
+  )
+}
 
 export default Header
