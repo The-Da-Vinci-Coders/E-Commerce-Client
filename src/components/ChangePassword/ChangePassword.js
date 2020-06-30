@@ -25,22 +25,30 @@ class ChangePassword extends Component {
     event.preventDefault()
 
     const { msgAlert, history, user } = this.props
-
-    changePassword(this.state, user)
-      .then(() => msgAlert({
-        heading: 'Change Password Success',
-        message: messages.changePasswordSuccess,
-        variant: 'success'
-      }))
-      .then(() => history.push('/'))
-      .catch(error => {
-        this.setState({ oldPassword: '', newPassword: '' })
-        msgAlert({
-          heading: 'Change Password Failed with error: ' + error.message,
-          message: messages.changePasswordFailure,
-          variant: 'danger'
-        })
+    if (user.email === 'guest@guest.com') {
+      this.setState({ oldPassword: '', newPassword: '' })
+      msgAlert({
+        heading: 'Change Password Failed',
+        message: messages.changePasswordGuest,
+        variant: 'danger'
       })
+    } else {
+      changePassword(this.state, user)
+        .then(() => msgAlert({
+          heading: 'Change Password Success',
+          message: messages.changePasswordSuccess,
+          variant: 'success'
+        }))
+        .then(() => history.push('/'))
+        .catch(error => {
+          this.setState({ oldPassword: '', newPassword: '' })
+          msgAlert({
+            heading: 'Change Password Failed with error: ' + error.message,
+            message: messages.changePasswordFailure,
+            variant: 'danger'
+          })
+        })
+    }
   }
 
   render () {

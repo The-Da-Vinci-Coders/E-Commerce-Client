@@ -12,5 +12,6 @@ export default {
   getPurchaseHistory: 'Could not get purchase history at this time, please try agian later.',
   checkoutFailure: 'Could not check out. Please double-check your card information and try again.',
   checkoutCompleteFailure: 'Could not check out at this time. Please try again.',
-  addToCartFailure: 'Could not add item to cart. Please try again.'
+  addToCartFailure: 'Could not add item to cart. Please try again.',
+  changePasswordGuest: 'You cannot change the password of the guest account.'
 }
